@@ -60,7 +60,7 @@ const composeQueryHandler = (
   }variables${optionalVariables}: ${variablesType}, config?: SWRConfigInterface<${responseType}, ClientError>) {
   return useSWR<${responseType}, ClientError>(${
     config.autogenKey
-      ? `genKey<${variablesType}>('${pascalName}', variables)`
+      ? `variables && genKey<${variablesType}>('${pascalName}', variables)`
       : 'key'
   }, () => sdk.${name}(variables), config);
 }`)
