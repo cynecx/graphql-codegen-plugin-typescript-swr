@@ -57,12 +57,13 @@ const composeQueryHandler = (
 
   codes.push(`use${pascalName}(${
     config.autogenKey ? '' : 'key: SWRKeyInterface, '
-  }variables?: ${variablesType} | null, config?: SWRConfigInterface<${responseType}, ClientError>) {
+  }variables?: ${variablesType} | null, config?: SWRConfigInterface<${responseType}, ClientError>,
+  requestHeaders?: Dom.RequestInit["headers"]) {
   return useSWR<${responseType}, ClientError>(${
     config.autogenKey
       ? `variables && genKey<${variablesType}>('${pascalName}', variables)`
       : 'key'
-  }, () => sdk.${name}(variables!), config);
+  }, () => sdk.${name}(variables!, requestHeaders), config);
 }`)
 
   if (config.infinite) {
