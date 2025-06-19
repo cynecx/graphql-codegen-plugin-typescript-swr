@@ -36,7 +36,7 @@ export interface ComposeQueryHandlerConfig {
 
 const composeQueryHandler = (
   operation: Operation,
-  config: ComposeQueryHandlerConfig
+  config: ComposeQueryHandlerConfig,
 ): string[] => {
   const codes: string[] = []
   const { node } = operation
@@ -44,7 +44,7 @@ const composeQueryHandler = (
     !node.variableDefinitions ||
     node.variableDefinitions.length === 0 ||
     node.variableDefinitions.every(
-      (v) => v.type.kind !== Kind.NON_NULL_TYPE || v.defaultValue
+      (v) => v.type.kind !== Kind.NON_NULL_TYPE || v.defaultValue,
     )
       ? '?'
       : ''
@@ -97,7 +97,7 @@ export class SWRVisitor extends ClientSideBaseVisitor<
   constructor(
     schema: GraphQLSchema,
     fragments: LoadedFragment[],
-    rawConfig: RawSWRPluginConfig
+    rawConfig: RawSWRPluginConfig,
   ) {
     super(schema, fragments, rawConfig, {
       excludeQueries: rawConfig.excludeQueries || null,
@@ -114,37 +114,37 @@ export class SWRVisitor extends ClientSideBaseVisitor<
     const typeImport = this.config.useTypeImports ? 'import type' : 'import'
 
     this._additionalImports.push(
-      `${typeImport} { ClientError } from 'graphql-request';`
+      `${typeImport} { ClientError } from 'graphql-request';`,
     )
 
     if (this.config.useTypeImports) {
       if (this._enabledInfinite) {
         this._additionalImports.push(
-          `import type { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`
+          `import type { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`,
         )
         this._additionalImports.push(
-          `import type { SWRInfiniteConfiguration } from 'swr/infinite';`
+          `import type { SWRInfiniteConfiguration } from 'swr/infinite';`,
         )
         this._additionalImports.push(`import useSWR from 'swr';`)
         this._additionalImports.push(
-          `import useSWRInfinite from 'swr/infinite';`
+          `import useSWRInfinite from 'swr/infinite';`,
         )
       } else {
         this._additionalImports.push(
-          `import type { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`
+          `import type { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`,
         )
         this._additionalImports.push(`import useSWR from 'swr';`)
       }
     } else if (this._enabledInfinite) {
       this._additionalImports.push(
-        `import useSWR, { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`
+        `import useSWR, { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`,
       )
       this._additionalImports.push(
-        `import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite';`
+        `import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite';`,
       )
     } else {
       this._additionalImports.push(
-        `import useSWR, { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`
+        `import useSWR, { SWRConfiguration as SWRConfigInterface, Key as SWRKeyInterface } from 'swr';`,
       )
     }
   }
@@ -154,7 +154,7 @@ export class SWRVisitor extends ClientSideBaseVisitor<
     documentVariableName: string,
     operationType: string,
     operationResultType: string,
-    operationVariablesTypes: string
+    operationVariablesTypes: string,
   ): string {
     this._operationsToInclude.push({
       node,
@@ -192,7 +192,7 @@ export class SWRVisitor extends ClientSideBaseVisitor<
           rawRequest: config.rawRequest,
           typesPrefix: config.typesPrefix,
           typesSuffix: config.typesSuffix,
-        })
+        }),
       )
       .reduce((p, c) => p.concat(c), [])
       .map((s) => indentMultiline(s, 2))
@@ -200,7 +200,7 @@ export class SWRVisitor extends ClientSideBaseVisitor<
     // Add type of SWRRawResponse
     if (config.rawRequest) {
       codes.push(
-        `type SWRRawResponse<Data = any> = { data?: Data | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; };`
+        `type SWRRawResponse<Data = any> = { data?: Data | undefined; extensions?: any; headers: Headers; status: number; errors?: GraphQLError[] | undefined; };`,
       )
     }
 
@@ -239,7 +239,7 @@ export class SWRVisitor extends ClientSideBaseVisitor<
     // Add the function for auto-generation key for SWR
     if (config.autogenSWRKey) {
       codes.push(
-        `  const genKey = <V extends Record<string, unknown> = Record<string, unknown>>(name: string, object: V = {} as V): SWRKeyInterface => [name, ...Object.keys(object).sort().map(key => object[key])];`
+        `  const genKey = <V extends Record<string, unknown> = Record<string, unknown>>(name: string, object: V = {} as V): SWRKeyInterface => [name, ...Object.keys(object).sort().map(key => object[key])];`,
       )
     }
 
@@ -252,7 +252,7 @@ ${allPossibleActions.join(',\n')}
 
     // Add type of Sdk
     codes.push(
-      `export type ${config.typesPrefix}SdkWithHooks${config.typesSuffix} = ReturnType<typeof getSdkWithHooks>;`
+      `export type ${config.typesPrefix}SdkWithHooks${config.typesSuffix} = ReturnType<typeof getSdkWithHooks>;`,
     )
 
     return codes.join('\n')

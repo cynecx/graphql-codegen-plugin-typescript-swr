@@ -15,7 +15,7 @@ import { SWRVisitor } from './visitor'
 export const plugin: PluginFunction<RawSWRPluginConfig> = (
   schema: GraphQLSchema,
   documents: Types.DocumentFile[],
-  config: RawSWRPluginConfig
+  config: RawSWRPluginConfig,
 ) => {
   const allAst = concatAST(documents.map((v) => v.document))
 
@@ -44,7 +44,7 @@ export const validate: PluginValidateFn<any> = async (
   _schema: GraphQLSchema,
   _documents: Types.DocumentFile[],
   _config: RawSWRPluginConfig,
-  outputFile: string
+  outputFile: string,
 ) => {
   if (extname(outputFile) !== '.ts') {
     throw new Error(`Plugin "typescript-swr" requires extension to be ".ts"!`)
