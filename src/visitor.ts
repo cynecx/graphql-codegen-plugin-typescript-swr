@@ -58,7 +58,7 @@ const composeQueryHandler = (
   codes.push(`use${pascalName}(${
     config.autogenKey ? '' : 'key: SWRKeyInterface, '
   }variables?: ${variablesType} | null, config?: SWRConfigInterface<${responseType}, ClientError>,
-  requestHeaders?: Dom.RequestInit["headers"]) {
+  requestHeaders?: RequestInit["headers"]) {
   return useSWR<${responseType}, ClientError>(${
     config.autogenKey
       ? `variables && genKey<${variablesType}>('${pascalName}', variables)`
@@ -114,7 +114,7 @@ export class SWRVisitor extends ClientSideBaseVisitor<
     const typeImport = this.config.useTypeImports ? 'import type' : 'import'
 
     this._additionalImports.push(
-      `${typeImport} { ClientError } from 'graphql-request/dist/types';`
+      `${typeImport} { ClientError } from 'graphql-request';`
     )
 
     if (this.config.useTypeImports) {
